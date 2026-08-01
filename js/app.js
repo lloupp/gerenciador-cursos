@@ -3,6 +3,7 @@ import { loadFromStorage, formatDate, formatCurrency } from './utils.js';
 import { initEvents, renderEventsTab, attachEventListeners, getEvents, escapeHTML } from './events.js';
 import { initRegistrations, renderRegistrationsTab, attachRegistrationListeners, getRegistrations } from './registrations.js';
 import { initFinance, renderFinanceTab, attachFinanceListeners } from './finance.js';
+import { initDashboard, renderDashboardTab, attachDashboardListeners } from './dashboard.js';
 
 // ===== Estado global da aplicação =====
 let currentTab = 'events';
@@ -13,6 +14,7 @@ function init() {
   initEvents();
   initRegistrations();
   initFinance();
+  initDashboard();
   loadData();
   setupTabs();
   renderTab(currentTab);
@@ -63,6 +65,10 @@ function renderTab(tab) {
       events = getEvents();
       container.innerHTML = renderFinanceTab();
       attachFinanceListeners();
+      break;
+    case 'dashboard':
+      container.innerHTML = renderDashboardTab();
+      attachDashboardListeners();
       break;
     case 'reports':
       container.innerHTML = renderReportsTab();
