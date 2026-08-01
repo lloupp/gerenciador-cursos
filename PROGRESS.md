@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 1 pendente (pesquisa)
+## Status: Fase 2 pendente (layout e navegação base)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -12,22 +12,12 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 
 ## Fases
 
-### Fase 1 — Pesquisa de mercado [PENDENTE]
+### Fase 1 — Pesquisa de mercado [CONCLUÍDO — 01/08/2026]
 **Objetivo:** Estudar os melhores apps de gerenciamento de cursos/eventos e enriquecer a skill com o que aprender.
-
-- Pesquisar na web: Sympla, Eventbrite, Even3, Sympla, Ticket Haus, exclusionwer, Meetup — features, fluxos, UX
-- Identificar features essenciais vs nice-to-have (validar contra o que já está na skill)
-- Estudar fluxos reais: inscrição → pagamento → check-in → pós-evento
-- Estudar modelos de pricing e categorias de custo/receita usados pelos apps
-- Verificar modelos de dados: quais campos os apps pains reais usam
-- Avaliar UX: como organizam a navegação (dashboard, listas, filtros, relatórios)
-- ATUALIZAR a skill `event-course-manager-builder` com os aprendizados:
-  - Adicionar features que faltaram
-  - Refinar o schema de dados se necessário
-  - Adicionar referências dos apps estudados
-  - Adicionar insights de UX
-- Commit no repo: `docs: Fase 1 — pesquisa de mercado + skill atualizada`
-- Não precisa implementar código nesta fase — só pesquisa e documentação
+- Pesquisa de Sympla, Eventbrite e Even3 via curl + análise de JSON-LD/schema.org
+- Documento de pesquisa em docs/pesquisa-mercado.md com análise comparativa
+- Skill atualizada (v1.1.0): schema expandido (lots, checkedIn, customFields, payee), categorias financeiras ampliadas, features pós-MVP adicionadas, boas práticas de UX, referências de mercado
+- Commit: 866fadb
 
 ### Fase 2 — Layout e Navegação Base [PENDENTE]
 - Header com título "Gerenciador de Cursos"
