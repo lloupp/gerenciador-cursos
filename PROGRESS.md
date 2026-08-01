@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 3 pendente (CRUD de eventos)
+## Status: Fase 4 pendente (Inscrições e participantes)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -28,13 +28,17 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - app.js com navegação entre tabs, renderização de cada seção, escapeHTML anti-XSS, formatação de moeda/data via utils.js
 - Commit: 1ef669d
 
-### Fase 3 — CRUD de Eventos [PENDENTE]
-- Implementar js/events.js
-- Formulário: nome, descrição, data, local, vagas, preço, categoria (curso/evento/workshop)
-- Lista de eventos com cards (nome, data, vagas preenchidas/total, status)
-- Editar e excluir evento
-- Persistência em localStorage
-- Commit: "feat: cadastro e gestão de eventos"
+### Fase 3 — CRUD de Eventos [CONCLUÍDO — 01/08/2026]
+- js/events.js: CRUD completo de eventos (criar, listar, editar, excluir)
+- Formulário com todos os campos do schema: nome, descrição, tipo (curso/evento/workshop), categoria, data início/término, local, vagas, preço, status
+- Lista em cards com badges de tipo e status, barra de progresso de vagas, botões editar e excluir
+- Validação: campos obrigatórios, data de término >= data de início
+- Persistência em localStorage (gc_events) com prefixo gc_
+- Confirmação ao excluir, remoção em cascata de inscrições e transações associadas
+- Schema conforme skill: id, name, description, type, date, endDate, location, capacity, price, category, status, lots, createdAt, updatedAt
+- js/app.js: integração com events.js via ES modules (initEvents, renderEventsTab, attachEventListeners)
+- escapeHTML centralizado em events.js e reexportado
+- Commit: 80150c5
 
 ### Fase 4 — Inscrições e Participantes [PENDENTE]
 - Implementar js/registrations.js
