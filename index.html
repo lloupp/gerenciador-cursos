@@ -8,8 +8,48 @@
 </head>
 <body>
   <div id="app">
-    <p>App em construção...</p>
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-title">
+          <span class="app-icon">🎓</span>
+          Gerenciador de Cursos
+        </h1>
+        <p class="app-subtitle">Organize eventos, inscrições e finanças em um só lugar</p>
+      </div>
+    </header>
+
+    <!-- Tabs de navegação -->
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" data-tab="events" role="tab" aria-selected="true">
+        <span class="tab-icon">📅</span>
+        <span class="tab-label">Eventos</span>
+      </button>
+      <button class="tab-btn" data-tab="registrations" role="tab" aria-selected="false">
+        <span class="tab-icon">👥</span>
+        <span class="tab-label">Inscrições</span>
+      </button>
+      <button class="tab-btn" data-tab="finance" role="tab" aria-selected="false">
+        <span class="tab-icon">💸</span>
+        <span class="tab-label">Financeiro</span>
+      </button>
+      <button class="tab-btn" data-tab="reports" role="tab" aria-selected="false">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">Relatórios</span>
+      </button>
+    </nav>
+
+    <!-- Container das seções -->
+    <main class="tab-content" id="tab-content">
+      <!-- Conteúdo renderizado dinamicamente pelo app.js -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Gerenciador de Cursos — Dados salvos localmente no seu navegador</p>
+    </footer>
   </div>
+
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
