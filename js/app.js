@@ -1,5 +1,6 @@
 // app.js — Lógica principal e navegação entre telas
 import { loadFromStorage, formatDate, formatCurrency } from './utils.js';
+import { initEvents, renderEventsTab, attachEventListeners, getEvents, escapeHTML } from './events.js';
 
 // ===== Estado global da aplicação =====
 let currentTab = 'events';
@@ -8,6 +9,7 @@ let registrations = [];
 
 // ===== Init =====
 function init() {
+  initEvents();
   loadData();
   setupTabs();
   renderTab(currentTab);
@@ -45,7 +47,10 @@ function renderTab(tab) {
   const container = document.getElementById('tab-content');
   switch (tab) {
     case 'events':
+      // Atualiza dados do módulo de eventos
+      events = getEvents();
       container.innerHTML = renderEventsTab();
+      attachEventListeners();
       break;
     case 'registrations':
       container.innerHTML = renderRegistrationsTab();
@@ -57,51 +62,6 @@ function renderTab(tab) {
       container.innerHTML = renderReportsTab();
       break;
   }
-}
-
-// ===== Eventos =====
-function renderEventsTab() {
-  if (events.length === 0) {
-    return renderEmptyState(
-      '📅',
-      'Nenhum evento cadastrado',
-      'Crie seu primeiro evento para começar a gerenciar inscrições e finanças. Você pode adicionar cursos, workshops ou qualquer tipo de evento.',
-      null
-    );
-  }
-  return `
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">Eventos</h2>
-        <p class="section-description">${events.length} evento${events.length > 1 ? 's' : ''} cadastrado${events.length > 1 ? 's' : ''}</p>
-      </div>
-      <button class="btn btn-primary" onclick="alert('Funcionalidade disponível na próxima fase')">+ Novo Evento</button>
-    </div>
-    <div class="card-grid">
-      ${events.map(eventCardHTML).join('')}
-    </div>
-  `;
-}
-
-function eventCardHTML(ev) {
-  const totalRegs = registrations.filter(r => r.eventId === ev.id && r.status !== 'cancelado').length;
-  const capacityPercent = ev.capacity ? Math.round((totalRegs / ev.capacity) * 100) : 0;
-  return `
-    <div class="card">
-      <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem">${escapeHTML(ev.name)}</h3>
-      <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:1rem">${escapeHTML(ev.description || 'Sem descrição')}</p>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:0.825rem;color:var(--text-secondary);margin-bottom:0.75rem">
-        <span>📅 ${formatDate(ev.date)}</span>
-        ${ev.location ? `<span>📍 ${escapeHTML(ev.location)}</span>` : ''}
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:0.85rem;color:var(--text-secondary)">Vagas: ${totalRegs} / ${ev.capacity || '∞'}</span>
-        <div style="background:var(--bg-input);border-radius:100px;height:6px;width:80px;overflow:hidden">
-          <div style="background:var(--accent);height:100%;width:${Math.min(capacityPercent, 100)}%;border-radius:100px"></div>
-        </div>
-      </div>
-    </div>
-  `;
 }
 
 // ===== Inscrições =====
@@ -253,16 +213,6 @@ function paymentBadgeClass(status) {
     'gratuito': 'badge-info',
   };
   return map[status] || 'badge-muted';
-}
-
-function escapeHTML(str) {
-  if (str === null || str === undefined) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }
 
 // ===== Boot =====
