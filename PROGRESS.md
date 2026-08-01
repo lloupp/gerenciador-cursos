@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 2 pendente (layout e navegação base)
+## Status: Fase 3 pendente (CRUD de eventos)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -19,14 +19,14 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - Skill atualizada (v1.1.0): schema expandido (lots, checkedIn, customFields, payee), categorias financeiras ampliadas, features pós-MVP adicionadas, boas práticas de UX, referências de mercado
 - Commit: 866fadb
 
-### Fase 2 — Layout e Navegação Base [PENDENTE]
-- Header com título "Gerenciador de Cursos"
-- Tabs: Eventos | Inscrições | Financeiro | Relatórios
-- Container que renderiza cada seção
-- CSS completo: grid/flex, cards, botões, inputs, tabelas, tema escuro
-- Empty state quando não há dados
-- Seguir skill event-course-manager-builder → "Fase 2"
-- Commit: "feat: layout e navegação base"
+### Fase 2 — Layout e Navegação Base [CONCLUÍDO — 01/08/2026]
+- Header com título "Gerenciador de Cursos" e subtítulo
+- Tabs: Eventos | Inscrições | Financeiro | Relatórios (com ícones e aria-selected)
+- Container que renderiza cada seção dinamicamente
+- CSS completo: variáveis de tema escuro, grid/flex, cards, botões (primary/danger/sm/icon), inputs/select/textarea, tabelas, badges (success/danger/info/warning/muted/purple), empty states com ícone+descrição, stats-grid, toolbar/filters-bar, footer, responsividade (768px e 480px)
+- Empty state em todas as 4 tabs quando não há dados
+- app.js com navegação entre tabs, renderização de cada seção, escapeHTML anti-XSS, formatação de moeda/data via utils.js
+- Commit: 1ef669d
 
 ### Fase 3 — CRUD de Eventos [PENDENTE]
 - Implementar js/events.js
