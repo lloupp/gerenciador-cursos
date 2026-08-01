@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 4 pendente (Inscrições e participantes)
+## Status: Fase 5 pendente (Controle Financeiro)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -40,15 +40,19 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - escapeHTML centralizado em events.js e reexportado
 - Commit: 80150c5
 
-### Fase 4 — Inscrições e Participantes [PENDENTE]
-- Implementar js/registrations.js
-- Formulário de inscrição: nome, email, telefone, evento, status (confirmado/pendente/cancelado), pagamento (pago/pendente)
-- Lista de participantes por evento
-- Filtro por evento e por status
-- Contador de vagas preenchidas vs total
-- Editar e excluir inscrição
-- Persistência em localStorage
-- Commit: "feat: inscrições e participantes"
+### Fase 4 — Inscrições e Participantes [CONCLUÍDO — 01/08/2026]
+- js/registrations.js: CRUD completo de inscrições (criar, listar, editar, excluir)
+- Formulário com todos os campos do schema: nome, email, telefone, evento, status (confirmado/pendente/cancelado), pagamento (pago/pendente/gratuito), forma de pagamento (pix/cartao/dinheiro/transferencia)
+- Lista em tabela com colunas: participante, email, telefone, evento, status, pagamento, data de inscrição, ações
+- Filtros por evento, status e pagamento
+- Contador de vagas: preenchidas vs total, bloquear inscrição quando evento esgotado
+- Validação: nome obrigatório, evento obrigatório, verificação de vagas ao criar e ao reativar inscrição cancelada
+- Persistência em localStorage (gc_registrations) com prefixo gc_
+- Schema conforme skill: id, eventId, participantName, email, phone, status, paymentStatus, paymentMethod, registeredAt, paidAt, checkedIn, checkedInAt, customFields
+- js/app.js: integração com registrations.js via ES modules (initRegistrations, renderRegistrationsTab, attachRegistrationListeners, getRegistrations)
+- Empty state quando não há inscrições nem eventos
+- escapeHTML importado de events.js para prevenir XSS
+- Commit: 4b5e0e1
 
 ### Fase 5 — Controle Financeiro [PENDENTE]
 - Implementar js/finance.js
