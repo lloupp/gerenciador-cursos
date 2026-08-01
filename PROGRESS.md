@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 7 pendente (Relatórios e Exportação)
+## Status: Fase 8 pendente (Polimento e UX)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -84,13 +84,18 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - escapeHTML importado de events.js para prevenir XSS
 - Commit: 789b35a
 
-### Fase 7 — Relatórios e Exportação [PENDENTE]
-- Implementar js/reports.js
-- Relatório de participantes por evento (tabela com filtros)
-- Relatório financeiro detalhado por evento
-- Relatório consolidado (todos os eventos)
-- Exportação CSV (participantes e financeiro)
-- Commit: "feat: relatórios e exportação CSV"
+### Fase 7 — Relatórios e Exportação [CONCLUÍDO — 01/08/2026]
+- js/reports.js: módulo completo de relatórios (initReports, renderReportsTab, attachReportsListeners)
+- Relatório de Participantes: tabela com filtros por evento, status e pagamento; colunas com participante, email, telefone, evento, status, pagamento, forma de pagamento, data de inscrição e data de pagamento
+- Relatório Financeiro: resumo financeiro por evento com breakdown de receitas e despesas por categoria, totais gerais, tabela de transações com tipo, categoria, descrição, data, valor e origem (auto/manual)
+- Relatório Consolidado: visão geral de todos os eventos com indicadores globais (receita, despesa, lucro, margem, ticket médio, ocupação, inscritos, confirmados), tabela consolidada com linha de totais
+- Exportação CSV: três botões de exportação (participantes, financeiro, consolidado) com Blob URL, BOM UTF-8 para Excel, escape de aspas e vírgulas, timestamp no nome do arquivo
+- Sub-tabs internas para alternar entre os três tipos de relatório
+- escapeHTML importado de events.js para prevenir XSS
+- Persistência em localStorage (gc_events, gc_registrations, gc_transactions) com prefixo gc_
+- js/app.js: integração via ES modules (initReports, renderReportsTab, attachReportsListeners); placeholder substituído pelo módulo completo
+- css/style.css: regra .reports-tabs-bar para sub-tabs de relatórios
+- Commit: ed5ca09
 
 ### Fase 8 — Polimento e UX [PENDENTE]
 - Animações de transição entre seções
