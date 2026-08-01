@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 6 pendente (Dashboard Geral)
+## Status: Fase 7 pendente (Relatórios e Exportação)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -72,12 +72,17 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - css/style.css: regra para canvas (display:block, max-width:100%)
 - Commit: fb392fa
 
-### Fase 6 — Dashboard Geral [PENDENTE]
-- Visão geral de todos os eventos: card por evento com resumo financeiro
-- Gráfico de pizza: distribuição de custos por categoria (todos os eventos)
-- Gráfico de barras: receitas x despesas por evento
-- Indicadores: total receitas, total custos, lucro total, ticket médio, taxa de ocupação
-- Commit: "feat: dashboard geral com gráficos"
+### Fase 6 — Dashboard Geral [CONCLUÍDO — 01/08/2026]
+- js/dashboard.js: módulo completo de dashboard geral consolidado
+- Indicadores: receita total, custo total, lucro total, ticket médio, taxa de ocupação, total de inscritos
+- Gráfico de pizza (Canvas): distribuição de custos por categoria (todos os eventos) com legenda HTML interativa
+- Gráfico de barras (Canvas): receitas x despesas por evento (com grid, labels, legenda)
+- Cards de resumo por evento: nome, tipo, status, data, local, receita, despesa, lucro, margem %, ocupação com barra de progresso
+- Nova aba "Dashboard" entre Financeiro e Relatórios no index.html
+- CSS: layout de gráficos lado a lado (.dashboard-charts), legenda do pizza (.chart-legend, .legend-item, etc.), responsividade (empilha em mobile)
+- Integration via ES modules no app.js (initDashboard, renderDashboardTab, attachDashboardListeners)
+- escapeHTML importado de events.js para prevenir XSS
+- Commit: 789b35a
 
 ### Fase 7 — Relatórios e Exportação [PENDENTE]
 - Implementar js/reports.js
