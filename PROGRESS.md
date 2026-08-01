@@ -5,17 +5,22 @@ Cada fase é executada em uma execução do cron, com commit e push ao final.
 
 ## Status: Fase 1 pendente
 
+## Skill de referência: `event-course-manager-builder`
+TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
+Ela contém o schema de dados, fluxo de UX, features, boas práticas e pitfalls.
+
 ## Fases
 
 ### Fase 1 — Layout e Navegação Base [PENDENTE]
-- Header com logo e título "Gerenciador de Cursos"
-- Sidebar/tabs de navegação: Eventos, Inscrições, Financeiro, Relatórios
-- Container principal que renderiza cada seção
-- CSS completo: layout grid/flex, cards, botões, inputs, tabelas, tema escuro
-- Tela vazia com mensagem quando não há dados
+- Header com título "Gerenciador de Cursos"
+- Tabs: Eventos | Inscrições | Financeiro | Relatórios
+- Container que renderiza cada seção
+- CSS completo: grid/flex, cards, botões, inputs, tabelas, tema escuro
+- Empty state quando não há dados
+- Seguir skill event-course-manager-builder → "Fase 1"
 - Commit: "feat: layout e navegação base"
 
-### Fase 2 — Cadastro e Gestão de Eventos [PENDENTE]
+### Fase 2 — CRUD de Eventos [PENDENTE]
 - Implementar js/events.js
 - Formulário: nome, descrição, data, local, vagas, preço, categoria (curso/evento/workshop)
 - Lista de eventos com cards (nome, data, vagas preenchidas/total, status)
