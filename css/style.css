@@ -470,6 +470,13 @@ td {
   font-size: 0.825rem;
 }
 
+/* ===== Canvas (gráficos) ===== */
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .app-header {

@@ -2,6 +2,7 @@
 import { loadFromStorage, formatDate, formatCurrency } from './utils.js';
 import { initEvents, renderEventsTab, attachEventListeners, getEvents, escapeHTML } from './events.js';
 import { initRegistrations, renderRegistrationsTab, attachRegistrationListeners, getRegistrations } from './registrations.js';
+import { initFinance, renderFinanceTab, attachFinanceListeners } from './finance.js';
 
 // ===== Estado global da aplicação =====
 let currentTab = 'events';
@@ -11,6 +12,7 @@ let events = [];
 function init() {
   initEvents();
   initRegistrations();
+  initFinance();
   loadData();
   setupTabs();
   renderTab(currentTab);
@@ -58,7 +60,9 @@ function renderTab(tab) {
       attachRegistrationListeners();
       break;
     case 'finance':
+      events = getEvents();
       container.innerHTML = renderFinanceTab();
+      attachFinanceListeners();
       break;
     case 'reports':
       container.innerHTML = renderReportsTab();
@@ -66,43 +70,7 @@ function renderTab(tab) {
   }
 }
 
-// ===== Financeiro =====
-function renderFinanceTab() {
-  const registrations = getRegistrations();
-  if (events.length === 0) {
-    return renderEmptyState(
-      '💸',
-      'Nenhum dado financeiro disponível',
-      'Cadastre eventos e inscrições para visualizar o controle financeiro. Receitas, despesas e lucro por evento aparecerão aqui.',
-      null
-    );
-  }
-  return `
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">Financeiro</h2>
-        <p class="section-description">Resumo financeiro dos eventos</p>
-      </div>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-card-label">💰 Receita Total</div>
-        <div class="stat-card-value positive">${formatCurrency(0)}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-label">💸 Despesa Total</div>
-        <div class="stat-card-value negative">${formatCurrency(0)}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-label">📈 Lucro/Prejuízo</div>
-        <div class="stat-card-value">${formatCurrency(0)}</div>
-      </div>
-    </div>
-    <div class="card" style="text-align:center;padding:2.5rem 1.5rem">
-      <p style="color:var(--text-muted);font-size:0.9rem">📊 Funcionalidade completa de controle financeiro será implementada na Fase 5</p>
-    </div>
-  `;
-}
+// ===== Financeiro (implementado em finance.js) =====
 
 // ===== Relatórios =====
 function renderReportsTab() {
