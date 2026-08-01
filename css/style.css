@@ -532,6 +532,14 @@ canvas {
   text-align: right;
 }
 
+/* ===== Reports: sub-tabs ===== */
+.reports-tabs-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .app-header {

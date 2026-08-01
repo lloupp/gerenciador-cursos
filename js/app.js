@@ -4,6 +4,7 @@ import { initEvents, renderEventsTab, attachEventListeners, getEvents, escapeHTM
 import { initRegistrations, renderRegistrationsTab, attachRegistrationListeners, getRegistrations } from './registrations.js';
 import { initFinance, renderFinanceTab, attachFinanceListeners } from './finance.js';
 import { initDashboard, renderDashboardTab, attachDashboardListeners } from './dashboard.js';
+import { initReports, renderReportsTab, attachReportsListeners } from './reports.js';
 
 // ===== Estado global da aplicação =====
 let currentTab = 'events';
@@ -15,6 +16,7 @@ function init() {
   initRegistrations();
   initFinance();
   initDashboard();
+  initReports();
   loadData();
   setupTabs();
   renderTab(currentTab);
@@ -72,49 +74,14 @@ function renderTab(tab) {
       break;
     case 'reports':
       container.innerHTML = renderReportsTab();
+      attachReportsListeners();
       break;
   }
 }
 
 // ===== Financeiro (implementado em finance.js) =====
 
-// ===== Relatórios =====
-function renderReportsTab() {
-  const registrations = getRegistrations();
-  if (events.length === 0 && registrations.length === 0) {
-    return renderEmptyState(
-      '📊',
-      'Nenhum dado para relatórios',
-      'Cadastre eventos e inscrições para gerar relatórios de participantes e financeiros com exportação em CSV.',
-      null
-    );
-  }
-  return `
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">Relatórios</h2>
-        <p class="section-description">Participantes, financeiro e exportação</p>
-      </div>
-    </div>
-    <div class="card-grid">
-      <div class="card">
-        <h3 style="font-size:1rem;font-weight:600;margin-bottom:0.75rem">📋 Relatório de Participantes</h3>
-        <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:1rem">Lista completa de inscritos por evento, com filtros e exportação CSV.</p>
-        <button class="btn" onclick="alert('Fase 7')">Ver relatório</button>
-      </div>
-      <div class="card">
-        <h3 style="font-size:1rem;font-weight:600;margin-bottom:0.75rem">💵 Relatório Financeiro</h3>
-        <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:1rem">Detalhamento de receitas e despesas por evento, com exportação CSV.</p>
-        <button class="btn" onclick="alert('Fase 7')">Ver relatório</button>
-      </div>
-      <div class="card">
-        <h3 style="font-size:1rem;font-weight:600;margin-bottom:0.75rem">📦 Relatório Consolidado</h3>
-        <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:1rem">Visão geral de todos os eventos em um único relatório.</p>
-        <button class="btn" onclick="alert('Fase 7')">Ver relatório</button>
-      </div>
-    </div>
-  `;
-}
+// ===== Relatórios (implementado em reports.js) =====
 
 // ===== Helpers de renderização =====
 function renderEmptyState(icon, title, description, _ctaButton) {
