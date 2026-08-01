@@ -1,15 +1,16 @@
 // app.js — Lógica principal e navegação entre telas
 import { loadFromStorage, formatDate, formatCurrency } from './utils.js';
 import { initEvents, renderEventsTab, attachEventListeners, getEvents, escapeHTML } from './events.js';
+import { initRegistrations, renderRegistrationsTab, attachRegistrationListeners, getRegistrations } from './registrations.js';
 
 // ===== Estado global da aplicação =====
 let currentTab = 'events';
 let events = [];
-let registrations = [];
 
 // ===== Init =====
 function init() {
   initEvents();
+  initRegistrations();
   loadData();
   setupTabs();
   renderTab(currentTab);
@@ -17,7 +18,6 @@ function init() {
 
 function loadData() {
   events = loadFromStorage('events', []);
-  registrations = loadFromStorage('registrations', []);
 }
 
 // ===== Tabs =====
@@ -53,7 +53,9 @@ function renderTab(tab) {
       attachEventListeners();
       break;
     case 'registrations':
-      container.innerHTML = renderRegistrationsTab();
+      events = getEvents();
+      container.innerHTML = renderRegistrationsTab(events);
+      attachRegistrationListeners();
       break;
     case 'finance':
       container.innerHTML = renderFinanceTab();
@@ -64,56 +66,9 @@ function renderTab(tab) {
   }
 }
 
-// ===== Inscrições =====
-function renderRegistrationsTab() {
-  if (registrations.length === 0) {
-    return renderEmptyState(
-      '👥',
-      'Nenhuma inscrição registrada',
-      'Cadastre participantes para seus eventos. Você pode controlar status de pagamento, confirmar presença e mais.',
-      null
-    );
-  }
-  return `
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">Inscrições</h2>
-        <p class="section-description">${registrations.length} inscrição${registrations.length > 1 ? 'ões' : ''} registrada${registrations.length > 1 ? 's' : ''}</p>
-      </div>
-      <button class="btn btn-primary" onclick="alert('Funcionalidade disponível na próxima fase')">+ Nova Inscrição</button>
-    </div>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Participante</th>
-            <th>Email</th>
-            <th>Evento</th>
-            <th>Status</th>
-            <th>Pagamento</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${registrations.map(reg => {
-            const ev = events.find(e => e.id === reg.eventId);
-            return `
-              <tr>
-                <td style="font-weight:500">${escapeHTML(reg.participantName)}</td>
-                <td style="color:var(--text-secondary)">${escapeHTML(reg.email)}</td>
-                <td>${ev ? escapeHTML(ev.name) : '<span class="badge badge-muted">Evento removido</span>'}</td>
-                <td><span class="badge ${statusBadgeClass(reg.status)}">${escapeHTML(reg.status)}</span></td>
-                <td><span class="badge ${paymentBadgeClass(reg.paymentStatus)}">${escapeHTML(reg.paymentStatus)}</span></td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
 // ===== Financeiro =====
 function renderFinanceTab() {
+  const registrations = getRegistrations();
   if (events.length === 0) {
     return renderEmptyState(
       '💸',
@@ -151,6 +106,7 @@ function renderFinanceTab() {
 
 // ===== Relatórios =====
 function renderReportsTab() {
+  const registrations = getRegistrations();
   if (events.length === 0 && registrations.length === 0) {
     return renderEmptyState(
       '📊',
