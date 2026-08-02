@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 9 pendente (Deploy no GitHub Pages)
+## Status: Projeto completo — todas as 9 fases concluídas 🎉
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -111,11 +111,14 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - Badges de status coloridos já implementados em fases anteriores (verde=ativo, amarelo=pendente, vermelho=cancelado, cinza=rascunho)
 - Commit: b1a969a
 
-### Fase 9 — Deploy no GitHub Pages [PENDENTE]
-- Configurar GitHub Pages
-- Verificar que o app funciona na URL pública
-- Atualizar README com URL e instruções
-- Commit: "deploy: GitHub Pages"
+### Fase 9 — Deploy no GitHub Pages [CONCLUÍDO — 02/08/2026]
+- GitHub Pages habilitado via `gh api` (build_type=legacy, branch=master, path=/)
+- Arquivo `.nojekyll` criado para garantir que arquivos sem `_` sejam servidos diretamente
+- URL pública: https://lloupp.github.io/gerenciador-cursos/
+- README atualizado com URL pública, estrutura completa de arquivos (incluindo dashboard.js, ui.js) e todas as features implementadas
+- Verificação: index.html, CSS e JS todos retornam HTTP 200 na URL pública
+- Todos os caminhos são relativos (css/style.css, js/app.js, imports `./`), compatíveis com subpath do GitHub Pages
+- Commit: 1460eca
 
 ## Regras do cron
 1. Ler este arquivo para saber qual fase executar
