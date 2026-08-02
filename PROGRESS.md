@@ -3,7 +3,7 @@
 Este arquivo controla o progresso do desenvolvimento automatizado via cron job.
 Cada fase é executada em uma execução do cron, com commit e push ao final.
 
-## Status: Fase 8 pendente (Polimento e UX)
+## Status: Fase 9 pendente (Deploy no GitHub Pages)
 
 ## Skill de referência: `event-course-manager-builder`
 TODAS as fases devem seguir a skill `event-course-manager-builder` (carregada no cron).
@@ -97,14 +97,19 @@ A Fase 1 (pesquisa) pode ATUALIZAR essa skill com novos conhecimentos.
 - css/style.css: regra .reports-tabs-bar para sub-tabs de relatórios
 - Commit: ed5ca09
 
-### Fase 8 — Polimento e UX [PENDENTE]
-- Animações de transição entre seções
-- Toast notifications para ações (salvar, excluir, erro)
-- Modal de confirmação ao excluir
-- Indicadores visuais (badges de status coloridos)
-- Responsividade mobile (menu hambúrguer, cards empilhados)
-- Validação completa: abrir no navegador, testar todas as features
-- Commit: "feat: polimento e UX"
+### Fase 8 — Polimento e UX [CONCLUÍDO — 01/08/2026]
+- js/ui.js: sistema reutilizável de toast notifications (success/error/warning/info) com auto-remove e animação slide-in
+- js/ui.js: modal de confirmação reutilizável (showConfirm retorna Promise<boolean>) com suporte a ESC, clique no overlay, botão fechar
+- Substituição de TODOS os alert() por showToast() e confirm() por showConfirm() (async) em events.js, registrations.js, finance.js, reports.js
+- Toast de sucesso em todas as ações: criar/editar/excluir evento, inscrição, transação; exportar CSV
+- Animação fadeInSlide ao trocar de aba (tab-content-animate no app.js)
+- Animação cardFadeIn para cards ao renderItem
+- css/style.css: toast container, estilos de toast (cores por tipo), modal overlay/dialog (slide-in), menu hambúrguer mobile com animação X
+- index.html: container de toast (#toast-container), modal de confirmação (#modal-overlay), botão menu-toggle no header
+- Menu hambúrguer mobile: esconde tabs no mobile, exibe dropdown ao clicar, fecha ao trocar de aba
+- Responsividade mobile expandida: stats-grid em coluna (480px), card-grid em coluna (480px), filtros verticais, modal 95% width
+- Badges de status coloridos já implementados em fases anteriores (verde=ativo, amarelo=pendente, vermelho=cancelado, cinza=rascunho)
+- Commit: b1a969a
 
 ### Fase 9 — Deploy no GitHub Pages [PENDENTE]
 - Configurar GitHub Pages
