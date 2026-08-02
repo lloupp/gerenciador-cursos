@@ -1,6 +1,7 @@
 // reports.js — Relatórios de participantes, financeiro e consolidado + exportação CSV
 import { loadFromStorage, formatCurrency, formatDate } from './utils.js';
 import { escapeHTML } from './events.js';
+import { showToast } from './ui.js';
 
 // ===== Estado =====
 let events = [];
@@ -528,7 +529,7 @@ function getFilteredRegistrations() {
 function exportParticipantsCSV() {
   const filtered = getFilteredRegistrations();
   if (filtered.length === 0) {
-    alert('Não há participantes para exportar com os filtros atuais.');
+    showToast('Não há participantes para exportar com os filtros atuais.', 'warning');
     return;
   }
 
@@ -551,12 +552,13 @@ function exportParticipantsCSV() {
   });
 
   downloadCSV(headers, rows, 'relatorio-participantes');
+  showToast('Relatório de participantes exportado com sucesso!', 'success');
 }
 
 function exportFinancialCSV() {
   const eventList = filterEventId ? events.filter(e => e.id === filterEventId) : events;
   if (eventList.length === 0) {
-    alert('Não há eventos para exportar.');
+    showToast('Não há eventos para exportar.', 'warning');
     return;
   }
 
@@ -581,16 +583,17 @@ function exportFinancialCSV() {
   }
 
   if (rows.length === 0) {
-    alert('Nenhuma transação encontrada para exportar.');
+    showToast('Nenhuma transação encontrada para exportar.', 'warning');
     return;
   }
 
   downloadCSV(headers, rows, 'relatorio-financeiro');
+  showToast('Relatório financeiro exportado com sucesso!', 'success');
 }
 
 function exportConsolidatedCSV() {
   if (events.length === 0) {
-    alert('Nenhum evento cadastrado para exportar.');
+    showToast('Nenhum evento cadastrado para exportar.', 'warning');
     return;
   }
 
@@ -629,6 +632,7 @@ function exportConsolidatedCSV() {
   });
 
   downloadCSV(headers, rows, 'relatorio-consolidado');
+  showToast('Relatório consolidado exportado com sucesso!', 'success');
 }
 
 function downloadCSV(headers, rows, filename) {

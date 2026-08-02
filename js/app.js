@@ -5,6 +5,10 @@ import { initRegistrations, renderRegistrationsTab, attachRegistrationListeners,
 import { initFinance, renderFinanceTab, attachFinanceListeners } from './finance.js';
 import { initDashboard, renderDashboardTab, attachDashboardListeners } from './dashboard.js';
 import { initReports, renderReportsTab, attachReportsListeners } from './reports.js';
+import { initModal, showToast } from './ui.js';
+
+// Exportar showToast para que os módulos possam usar via import
+export { showToast };
 
 // ===== Estado global da aplicação =====
 let currentTab = 'events';
@@ -17,8 +21,10 @@ function init() {
   initFinance();
   initDashboard();
   initReports();
-  loadData();
+  initModal();
   setupTabs();
+  setupMobileMenu();
+  loadData();
   renderTab(currentTab);
 }
 
@@ -33,11 +39,14 @@ function setupTabs() {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
       switchTab(tab);
+      // Fecha o menu mobile ao trocar de tab
+      closeMobileMenu();
     });
   });
 }
 
 function switchTab(tab) {
+  if (tab === currentTab) return;
   currentTab = tab;
   const tabBtns = document.querySelectorAll('.tab-btn');
   tabBtns.forEach(btn => {
@@ -45,7 +54,48 @@ function switchTab(tab) {
     btn.classList.toggle('active', isActive);
     btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
+  // Adiciona animação de fade ao trocar de aba
+  const container = document.getElementById('tab-content');
+  container.classList.remove('tab-content-animate');
+  // Força reflow para reiniciar a animação
+  void container.offsetWidth;
+  container.classList.add('tab-content-animate');
   renderTab(tab);
+}
+
+// ===== Menu mobile (hambúrguer) =====
+function setupMobileMenu() {
+  const toggle = document.getElementById('menu-toggle');
+  if (!toggle) return;
+  toggle.addEventListener('click', () => {
+    const nav = document.getElementById('tabs-nav');
+    const isOpen = nav.classList.contains('tabs-nav-open');
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
+}
+
+function openMobileMenu() {
+  const nav = document.getElementById('tabs-nav');
+  const toggle = document.getElementById('menu-toggle');
+  if (nav) nav.classList.add('tabs-nav-open');
+  if (toggle) {
+    toggle.classList.add('menu-toggle-open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function closeMobileMenu() {
+  const nav = document.getElementById('tabs-nav');
+  const toggle = document.getElementById('menu-toggle');
+  if (nav) nav.classList.remove('tabs-nav-open');
+  if (toggle) {
+    toggle.classList.remove('menu-toggle-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
 }
 
 // ===== Renderização por seção =====

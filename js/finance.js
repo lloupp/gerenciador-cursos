@@ -1,6 +1,7 @@
 // finance.js — Controle financeiro: transações, dashboard e gráficos
 import { loadFromStorage, saveToStorage, generateId, formatCurrency, formatDate } from './utils.js';
 import { escapeHTML } from './events.js';
+import { showToast, showConfirm } from './ui.js';
 
 // ===== Estado =====
 let transactions = [];
@@ -483,19 +484,19 @@ function handleSubmitTransaction(e) {
 
   // Validação
   if (!eventId) {
-    alert('Por favor, selecione um evento.');
+    showToast('Por favor, selecione um evento.', 'warning');
     return;
   }
   if (!category) {
-    alert('Por favor, selecione uma categoria.');
+    showToast('Por favor, selecione uma categoria.', 'warning');
     return;
   }
   if (isNaN(amount) || amount <= 0) {
-    alert('Por favor, informe um valor válido maior que zero.');
+    showToast('Por favor, informe um valor válido maior que zero.', 'warning');
     return;
   }
   if (!date) {
-    alert('Por favor, informe a data da transação.');
+    showToast('Por favor, informe a data da transação.', 'warning');
     return;
   }
 
@@ -535,18 +536,26 @@ function handleSubmitTransaction(e) {
   saveToStorage('transactions', transactions);
   showForm = false;
   editingId = null;
+  showToast(editingId ? 'Transação atualizada com sucesso!' : 'Transação registrada com sucesso!', 'success');
   renderFinanceTabAndAttach();
 }
 
 // ===== Excluir transação =====
-function handleDeleteTransaction(id) {
+async function handleDeleteTransaction(id) {
   const tx = transactions.find(t => t.id === id);
   if (!tx) return;
 
-  if (!confirm(`Deseja realmente excluir esta transação (${tx.type === 'receita' ? 'Receita' : 'Despesa'} — ${formatCurrency(tx.amount)})?`)) return;
+  const confirmed = await showConfirm(
+    'Excluir transação',
+    `Deseja realmente excluir esta transação (${tx.type === 'receita' ? 'Receita' : 'Despesa'} — ${formatCurrency(tx.amount)})?`,
+    { confirmText: 'Excluir', danger: true }
+  );
+
+  if (!confirmed) return;
 
   transactions = transactions.filter(t => t.id !== id);
   saveToStorage('transactions', transactions);
+  showToast('Transação excluída com sucesso.', 'success');
   renderFinanceTabAndAttach();
 }
 

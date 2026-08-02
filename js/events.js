@@ -1,5 +1,6 @@
 // events.js — Cadastro e gestão de eventos (CRUD completo)
 import { loadFromStorage, saveToStorage, generateId, formatCurrency, formatDate } from './utils.js';
+import { showToast, showConfirm } from './ui.js';
 
 // ===== Estado =====
 let events = [];
@@ -252,16 +253,16 @@ function handleSubmitEvent(e) {
 
   // Validação
   if (!name) {
-    alert('Por favor, informe o nome do evento.');
+    showToast('Por favor, informe o nome do evento.', 'warning');
     return;
   }
   if (!date) {
-    alert('Por favor, informe a data de início.');
+    showToast('Por favor, informe a data de início.', 'warning');
     return;
   }
   // Valida data de término posterior à data de início
   if (endDate && new Date(endDate) < new Date(date)) {
-    alert('A data de término deve ser posterior ou igual à data de início.');
+    showToast('A data de término deve ser posterior ou igual à data de início.', 'warning');
     return;
   }
 
@@ -308,24 +309,38 @@ function handleSubmitEvent(e) {
   saveToStorage('events', events);
   showForm = false;
   editingId = null;
+  showToast(editingId ? 'Alterações salvas com sucesso!' : 'Evento criado com sucesso!', 'success');
   renderEventsTabAndAttach();
 }
 
 // ===== Excluir evento =====
-function handleDeleteEvent(id) {
+async function handleDeleteEvent(id) {
   const ev = events.find(e => e.id === id);
   if (!ev) return;
 
   // Verifica se há inscrições
   const hasRegistrations = registrations.some(r => r.eventId === id);
+  let confirmed = false;
   if (hasRegistrations) {
-    const confirmMsg = `O evento "${ev.name}" possui inscrições vinculadas. Excluir o evento também removerá todas as inscrições e transações associadas. Deseja continuar?`;
-    if (!confirm(confirmMsg)) return;
-    // Remove inscrições associadas
+    confirmed = await showConfirm(
+      'Excluir evento',
+      `O evento "${ev.name}" possui inscrições vinculadas. Excluir o evento também removerá todas as inscrições e transações associadas. Deseja continuar?`,
+      { confirmText: 'Excluir', danger: true }
+    );
+  } else {
+    confirmed = await showConfirm(
+      'Excluir evento',
+      `Deseja realmente excluir o evento "${ev.name}"?`,
+      { confirmText: 'Excluir', danger: true }
+    );
+  }
+
+  if (!confirmed) return;
+
+  // Remove inscrições associadas
+  if (hasRegistrations) {
     registrations = registrations.filter(r => r.eventId !== id);
     saveToStorage('registrations', registrations);
-  } else {
-    if (!confirm(`Deseja realmente excluir o evento "${ev.name}"?`)) return;
   }
 
   events = events.filter(e => e.id !== id);
@@ -340,6 +355,7 @@ function handleDeleteEvent(id) {
     // ignore
   }
 
+  showToast('Evento excluído com sucesso.', 'success');
   renderEventsTabAndAttach();
 }
 

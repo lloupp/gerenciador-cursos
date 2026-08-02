@@ -1,6 +1,7 @@
 // registrations.js — CRUD de inscrições e participantes
 import { loadFromStorage, saveToStorage, generateId, formatCurrency, formatDate } from './utils.js';
 import { escapeHTML } from './events.js';
+import { showToast, showConfirm } from './ui.js';
 
 // ===== Estado =====
 let registrations = [];
@@ -329,11 +330,11 @@ function handleSubmitRegistration(e) {
 
   // Validação
   if (!participantName) {
-    alert('Por favor, informe o nome do participante.');
+    showToast('Por favor, informe o nome do participante.', 'warning');
     return;
   }
   if (!eventId) {
-    alert('Por favor, selecione um evento.');
+    showToast('Por favor, selecione um evento.', 'warning');
     return;
   }
 
@@ -343,7 +344,7 @@ function handleSubmitRegistration(e) {
     if (ev && ev.capacity > 0) {
       const filled = registrations.filter(r => r.eventId === eventId && r.status !== 'cancelado').length;
       if (filled >= ev.capacity) {
-        alert(`Este evento está com as vagas esgotadas (${filled}/${ev.capacity}).`);
+        showToast(`Este evento está com as vagas esgotadas (${filled}/${ev.capacity}).`, 'warning');
         return;
       }
     }
@@ -355,7 +356,7 @@ function handleSubmitRegistration(e) {
       if (ev && ev.capacity > 0) {
         const filled = registrations.filter(r => r.eventId === eventId && r.status !== 'cancelado' && r.id !== editingId).length;
         if (filled >= ev.capacity) {
-          alert(`Não há vagas disponíveis para reativar esta inscrição (${filled}/${ev.capacity}).`);
+          showToast(`Não há vagas disponíveis para reativar esta inscrição (${filled}/${ev.capacity}).`, 'warning');
           return;
         }
       }
@@ -401,21 +402,29 @@ function handleSubmitRegistration(e) {
   saveToStorage('registrations', registrations);
   showForm = false;
   editingId = null;
+  showToast(editingId ? 'Inscrição atualizada com sucesso!' : 'Inscrição criada com sucesso!', 'success');
   renderRegistrationsTabAndAttach();
 }
 
 // ===== Excluir inscrição =====
-function handleDeleteRegistration(id) {
+async function handleDeleteRegistration(id) {
   const reg = registrations.find(r => r.id === id);
   if (!reg) return;
 
   const ev = events.find(e => e.id === reg.eventId);
   const evName = ev ? ev.name : 'evento removido';
 
-  if (!confirm(`Deseja realmente excluir a inscrição de "${reg.participantName}" no evento "${evName}"?`)) return;
+  const confirmed = await showConfirm(
+    'Excluir inscrição',
+    `Deseja realmente excluir a inscrição de "${reg.participantName}" no evento "${evName}"?`,
+    { confirmText: 'Excluir', danger: true }
+  );
+
+  if (!confirmed) return;
 
   registrations = registrations.filter(r => r.id !== id);
   saveToStorage('registrations', registrations);
+  showToast('Inscrição excluída com sucesso.', 'success');
   renderRegistrationsTabAndAttach();
 }
 
